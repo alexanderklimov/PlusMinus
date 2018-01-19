@@ -1,4 +1,4 @@
-package com.livermor.plusminus;
+package ru.alexanderklimov.plusminus;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

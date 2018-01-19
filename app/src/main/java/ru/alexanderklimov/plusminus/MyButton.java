@@ -1,10 +1,11 @@
-package com.livermor.plusminus;
+package ru.alexanderklimov.plusminus;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
-import android.widget.Button;
 
-public class MyButton extends Button {
+//This custom view should extend `android.support.v7.widget.AppCompatButton` instead Button
+public class MyButton extends AppCompatButton {
 
     private MyOnClickListener mClickListener;//наш интерфейс учета кликов для MainActivity
     int idX = 0;

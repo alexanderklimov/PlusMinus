@@ -1,10 +1,10 @@
-package com.livermor.plusminus;
+package ru.alexanderklimov.plusminus;
 
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
@@ -30,9 +30,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(ru.alexanderklimov.plusminus.R.layout.activity_main);
 
-        mGridLayout = (GridLayout) findViewById(R.id.my_grid);
+        mGridLayout = findViewById(ru.alexanderklimov.plusminus.R.id.my_grid);
         mGridLayout.setColumnCount(MATRIX_SIZE);
         mGridLayout.setRowCount(MATRIX_SIZE);
         mButtons = new MyButton[MATRIX_SIZE][MATRIX_SIZE];//5 строк и 5 рядов
@@ -42,25 +42,25 @@ public class MainActivity extends AppCompatActivity
             for (int xPos = 0; xPos < MATRIX_SIZE; xPos++) {
                 MyButton mBut = new MyButton(this, xPos, yPos);
 
-                mBut.setTextSize(30-MATRIX_SIZE);
+                mBut.setTextSize(30 - MATRIX_SIZE);
                 Typeface boldTypeface = Typeface.defaultFromStyle(Typeface.BOLD);
                 mBut.setTypeface(boldTypeface);
-                mBut.setTextColor(ContextCompat.getColor(this, R.color.white));
+                mBut.setTextColor(ContextCompat.getColor(this, ru.alexanderklimov.plusminus.R.color.white));
                 mBut.setOnClickListener(this);
                 mBut.setPadding(1, 1, 1, 1); //так цифры будут адаптироваться под размер
 
                 mBut.setAlpha(1);
                 mBut.setClickable(false);
 
-                mBut.setBackgroundResource(R.drawable.bg_grey);
+                mBut.setBackgroundResource(ru.alexanderklimov.plusminus.R.drawable.bg_grey);
 
                 mButtons[yPos][xPos] = mBut;
                 mGridLayout.addView(mBut);
             }
         }
 
-        mUpText = (TextView) findViewById(R.id.upper_scoreboard);
-        mLowText = (TextView) findViewById(R.id.lower_scoreboard);
+        mUpText = findViewById(ru.alexanderklimov.plusminus.R.id.upper_scoreboard);
+        mLowText = findViewById(ru.alexanderklimov.plusminus.R.id.lower_scoreboard);
 
         //расположим кнопки с цифрами равномерно внутри mGridLayout
         mGridLayout.getViewTreeObserver().addOnGlobalLayoutListener(
@@ -130,11 +130,13 @@ public class MainActivity extends AppCompatActivity
     public void changeButtonBg(int y, int x, boolean row, boolean active) {
 
         if (active) {
-            if (row) mButtons[y][x].setBackgroundResource(R.drawable.bg_blue);
-            else mButtons[y][x].setBackgroundResource(R.drawable.bg_red);
+            if (row)
+                mButtons[y][x].setBackgroundResource(ru.alexanderklimov.plusminus.R.drawable.bg_blue);
+            else
+                mButtons[y][x].setBackgroundResource(ru.alexanderklimov.plusminus.R.drawable.bg_red);
 
         } else {
-            mButtons[y][x].setBackgroundResource(R.drawable.bg_grey);
+            mButtons[y][x].setBackgroundResource(ru.alexanderklimov.plusminus.R.drawable.bg_grey);
         }
     }
 

@@ -1,4 +1,4 @@
-package com.livermor.plusminus; //не забудьте заменить "livermor" на ваш Company Domain
+package ru.alexanderklimov.plusminus;
 
 public class Bot {
 

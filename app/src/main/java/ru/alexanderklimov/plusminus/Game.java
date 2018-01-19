@@ -1,9 +1,10 @@
-package com.livermor.plusminus;
+package ru.alexanderklimov.plusminus;
 
 import android.os.AsyncTask;
 import android.os.Handler;
 
 import java.util.Random;
+
 
 public class Game {
 

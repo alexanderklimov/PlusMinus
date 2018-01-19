@@ -1,4 +1,4 @@
-package com.livermor.plusminus;
+package ru.alexanderklimov.plusminus;
 
 import org.junit.Test;
 
