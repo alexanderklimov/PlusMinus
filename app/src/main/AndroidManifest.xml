@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-если будете копировать, то не забудьте поменять package на свой.
-вообще конечно лучше просто копируйте одну строчку
->>> android:screenOrientation="portrait"
--->
 <manifest package="ru.alexanderklimov.plusminus"
           xmlns:android="http://schemas.android.com/apk/res/android">
 

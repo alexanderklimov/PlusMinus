@@ -84,8 +84,6 @@ public class MainActivity extends AppCompatActivity
 
         int pWidth = mGridLayout.getWidth();
         int pHeight = mGridLayout.getHeight();
-        int numOfCol = MATRIX_SIZE;
-        int numOfRow = MATRIX_SIZE;
 
         //сделаем mGridLayout квадратом
         if (pWidth >= pHeight) pLength = pHeight;
@@ -95,8 +93,8 @@ public class MainActivity extends AppCompatActivity
         pParams.height = pLength;
         mGridLayout.setLayoutParams(pParams);
 
-        int w = pLength / numOfCol;
-        int h = pLength / numOfRow;
+        int w = pLength / MATRIX_SIZE;
+        int h = pLength / MATRIX_SIZE;
 
         for (int yPos = 0; yPos < MATRIX_SIZE; yPos++) {
             for (int xPos = 0; xPos < MATRIX_SIZE; xPos++) {
@@ -112,14 +110,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     //MyButton.MyOnClickListener интерфейс
-    //*************************************************************************
     @Override
     public void OnTouchDigit(MyButton v) {
         game.OnUserTouchDigit(v.getIdY(), v.getIdX());
     }
 
     //Game.ResultsCallback интерфейс
-    //*************************************************************************
     @Override
     public void changeLabel(boolean upLabel, int points) {
         if (upLabel) mUpText.setText(String.format("Бот: %d", points));

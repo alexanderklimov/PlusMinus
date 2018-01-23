@@ -52,7 +52,6 @@ public class MyButton extends AppCompatButton {
 
 
     //Интерфейс для MainActivity
-    //************************************
     public interface MyOnClickListener {
 
         void OnTouchDigit(MyButton v);

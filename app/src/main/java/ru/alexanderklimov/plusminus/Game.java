@@ -6,35 +6,35 @@ import android.os.Handler;
 import java.util.Random;
 
 
-public class Game {
+class Game {
 
     //время задержки перед обновлениями очков, смены анимации
-    public static final int mTimeToWait = 800;
-    protected MyAnimation mAnimation; //класс AsyncTask для анимации
+    private static final int mTimeToWait = 800;
+    private AnimationTask mAnimation; //класс AsyncTask для анимации
 
     //матрица цифр и матрица допустимых ходов
-    protected int[][] mMatrix; //digits for buttons
-    protected volatile boolean[][] mAllowedMoves;
-    protected int mSize; //размер матрицы
+    private int[][] mMatrix; //digits for buttons
+    private volatile boolean[][] mAllowedMoves;
+    private int mSize; //размер матрицы
 
-    protected int playerOnePoints = 0, playerTwoPoints = 0;//очки игроков
+    private int playerOnePoints = 0, playerTwoPoints = 0;//очки игроков
 
-    protected volatile boolean isRow = true; //мы играем за строку или за ряд
-    protected volatile int currentActiveNumb; //нужно для определения последнего хода
-    protected ResultsCallback mResults;//интерфейс, который будет реализовывать MainActivity
+    private volatile boolean isRow = true; //мы играем за строку или за ряд
+    private volatile int currentActiveNumb; //нужно для определения последнего хода
+    private ResultsCallback mResults;//интерфейс, который будет реализовывать MainActivity
 
-    protected volatile Bot bot;//написанный нами бот
-    Random rnd; // для заполнения матрицы цифрами и определения первой активной строки
+    private volatile Bot bot;//написанный нами бот
+    private Random random; // для заполнения матрицы цифрами и определения первой активной строки
 
-    public Game(ResultsCallback results, int size) {
+    Game(ResultsCallback results, int size) {
         mResults = results; //передаем сущность интерфейса
         mSize = size;
 
-        rnd = new Random();
+        random = new Random();
         generateMatrix(); //заполняем матрицу случайнами цифрами
 
         //условный ход, нужен для определения активной строки
-        currentActiveNumb = rnd.nextInt(mSize);
+        currentActiveNumb = random.nextInt(mSize);
 
         isRow = true; //в нашей версии мы всегда будем играть за строку (просто для упрощения)
 
@@ -52,11 +52,11 @@ public class Game {
         bot = new Bot(mMatrix, true);
     }
 
-    public void startGame() {
+    void startGame() {
         activateRawOrColumn(true);
     }
 
-    protected void generateMatrix() {
+    private void generateMatrix() {
 
         mMatrix = new int[mSize][mSize];
         mAllowedMoves = new boolean[mSize][mSize];
@@ -64,14 +64,14 @@ public class Game {
         for (int i = 0; i < mSize; i++) {
             for (int j = 0; j < mSize; j++) {
 
-                mMatrix[i][j] = rnd.nextInt(19) - 9; //от -9 до 9
+                mMatrix[i][j] = random.nextInt(19) - 9; //от -9 до 9
                 mAllowedMoves[i][j] = true; // сперва все ходы доступны
             }
         }
     }
 
     //будем вызывать метод из MainActivity, которая будет следить за нажатиями кнопок с цифрами
-    public void OnUserTouchDigit(int y, int x) {
+    void OnUserTouchDigit(int y, int x) {
 
         mResults.onClick(y, x, true);
         activateRawOrColumn(false);//после хода нужно заблокирвоать доступные кнопки
@@ -81,7 +81,7 @@ public class Game {
 
         mResults.changeLabel(false, playerOnePoints);//изменяем свои очки
 
-        mAnimation = new MyAnimation(y, x, true, isRow);//включаем анимацию смены хода
+        mAnimation = new AnimationTask(y, x, true, isRow);//включаем анимацию смены хода
         mAnimation.execute();
 
         isRow = !isRow; //после хода меняем строку на ряд
@@ -89,7 +89,7 @@ public class Game {
     }
 
     //по завершению анимации разрешаем совершить ход боту
-    protected void onAnimationFinished() {
+    private void onAnimationFinished() {
 
         if (!isRow) {//в нашей версии бот играет только за ряды (вертикально)
 
@@ -125,14 +125,14 @@ public class Game {
         mResults.onClick(y, x, false); //имитируем нажатие на кнопку
         mResults.changeLabel(true, playerTwoPoints); //меняем очки бота
 
-        mAnimation = new MyAnimation(y, x, true, isRow); //анимируем смену хода
+        mAnimation = new AnimationTask(y, x, true, isRow); //анимируем смену хода
         mAnimation.execute();
 
         isRow = !isRow; //меняем столбцы на строки
         currentActiveNumb = botMove; //по ходу бота определим, где теперь будет строка
     }
 
-    protected void activateRawOrColumn(final boolean active) {
+    private void activateRawOrColumn(final boolean active) {
 
         int countMovesAllowed = 0; // для определения, есть ли допустимые ходы
 
@@ -152,14 +152,14 @@ public class Game {
 
     //анимация закрашивания кнопок — одна за другой
     //сперва закрашиваем новые ходы — затем стираем предыдущие
-    protected class MyAnimation extends AsyncTask<Void, Integer, Void> {
+    protected class AnimationTask extends AsyncTask<Void, Integer, Void> {
 
         int timeToWait = 35; //время задержки в миллисекундах
         int y, x;
         boolean activate;
         boolean row;
 
-        protected MyAnimation(int y, int x, boolean activate, boolean row) {
+        AnimationTask(int y, int x, boolean activate, boolean row) {
             this.activate = activate;
             this.row = !row;
             this.y = y;
@@ -201,7 +201,6 @@ public class Game {
                     if (uppInc2 > uppInc) publishProgress(uppInc2--);
                 }
             }
-
             return null;
         }
 
@@ -221,7 +220,7 @@ public class Game {
         protected void onPostExecute(Void aVoid) {
 
             if (activate) //если только что активировали, то теперь нужно деактивировать старое
-                new MyAnimation(y, x, false, row).execute();
+                new AnimationTask(y, x, false, row).execute();
             else //теперь, когда завершили деактивацию, дергаем метод завершения анимации
                 onAnimationFinished();
         }
@@ -236,13 +235,12 @@ public class Game {
         }
     }
 
-    protected void onResult() {
+    private void onResult() {
         //метод интерфеса для отображения результатов
         mResults.onResult(playerOnePoints, playerTwoPoints);
     }
 
     //Интерфейс для MainActivity, который будет изменять ui элементы
-    //*********************************************************************************
     public interface ResultsCallback {
 
         //для изменения ваших очков и очков соперника

@@ -2,23 +2,23 @@ package ru.alexanderklimov.plusminus;
 
 public class Bot {
 
-    protected int[][] mMatrix; //digits for buttons
-    protected boolean[][] mAllowedMoves; //ходы, куда еще не сходили
-    protected int mSize; //размер матрицы
-    protected int mPlayerPoints = 0, mAiPoints = 0; //очки игроков
-    protected boolean mIsVertical; //играем за строки или ряды
-    protected int mCurrentActiveNumb; //номер последнего хода (от 0 до размера матрицы(mSize))
+    private int[][] mMatrix; //цифры для кнопок
+    private boolean[][] mAllowedMoves; //ходы, куда еще не сходили
+    private int mSize; //размер матрицы
+    private int mPlayerPoints = 0, mAiPoints = 0; //очки игроков
+    private boolean mIsVertical; //играем за строки или ряды
+    private int mCurrentActiveNumb; //номер последнего хода (от 0 до размера матрицы(mSize))
 
     //рейтинги для ходов
-    private final static int CANT_GO_THERE = -1000; //если нет хода, то ставим ретинг -1000
+    private final static int CANT_GO_THERE = -1000; //если нет хода, то ставим рейтинг -1000
     private final static int WORST_MOVE = -500; // ход, когда мы неизбежно проигрываем
     private final static int VICTORY_MOVE = 500; // ход, когда мы неизбежно выигрываем
     private final static int JACKPOT_INCREASE = 9; //надбавка к рейтингу, если ход принесет куш
     private static final int GOOD_ADVANTAGE = 6;//Куш (джекпот), равный разнице в 6 очков или больше
 
-    int depth = 3; //по умолчанию просчитываем на 3 хода вперед
+    private int depth = 3; //по умолчанию просчитываем на 3 хода вперед
 
-    public Bot(
+    Bot(
             int[][] matrix,
             boolean vertical
     ) {
@@ -28,12 +28,7 @@ public class Bot {
     }
 
     //функция, возвращающая номер хода
-    public int move(
-            int playerPoints,
-            int botPoints,
-            boolean[][] moves,
-            int activeNumb
-    ) {
+    int move(int playerPoints, int botPoints, boolean[][] moves, int activeNumb) {
         mPlayerPoints = playerPoints;
         mAiPoints = botPoints;
         mCurrentActiveNumb = activeNumb;
@@ -47,7 +42,7 @@ public class Bot {
         this.depth = depth;
     }
 
-    protected int calcMove() {
+    private int calcMove() {
         //функция для определения лучшего хода игрока
         return calcBestMove(depth, mAllowedMoves,
                 mCurrentActiveNumb, mIsVertical, mAiPoints, mPlayerPoints);
@@ -141,7 +136,7 @@ public class Bot {
         int currentMax = -10;
         int move = mSize;
 
-        int y = 0, x = 0;
+        int y, x;
         for (int i = 0; i < mSize; i++) {
             y = isVert ? i : lastM;
             x = isVert ? lastM : i;
